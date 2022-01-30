@@ -16,7 +16,7 @@ docker run \
 -v my/host/folder/tags:/home/invader/tags \
 -v my/host/folder/maps:/home/invader/maps \
 invader-docker \
-invader-build -g gbx-custom -H "levels\test\bloodgulch\bloodgulch"
+invader-build -g gbx-custom -H "levels/test/bloodgulch/bloodgulch"
 ```
 
 # Community!
