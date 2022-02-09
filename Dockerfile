@@ -17,5 +17,8 @@ USER build
 RUN cd yay-git && \
     makepkg -si --noconfirm
 
+# Install specific libsquish version prior to invader (has some fixes for building bitmaps)    
+RUN yay -S libsquish-fixed-tables --noconfirm
+
 # Install invader
 RUN yay -S invader-git --noconfirm
