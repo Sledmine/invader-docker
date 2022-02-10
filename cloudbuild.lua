@@ -6,12 +6,11 @@ local split = glue.string.split
 -- local inspect = require "lua.inspect"
 
 local dockerRun =
-    [[sudo docker run -v "/home/ubuntu/shadowmods/nextcloud/data/%s/files/%s/tags":/home/invader/tags -v "%s":/home/invader/maps -v "%s":/home/invader/resources invader-docker ]]
+    [[sudo docker run -v "/home/ubuntu/shadowmods/nextcloud/data/%s/files/%s/tags":/invader/tags -v "%s":/invader/maps -v "%s":/invader/resources invader-docker ]]
 
 -- invader-build commands for CI/CD server
 -- user, cloudpath, outputpath, resourcespath, tagsize, scenariopath
-local buildMap = dockerRun ..
-                     [[sudo invader-build -t ./tags -R /home/invader/resources -m /home/invader/maps -E -g gbx-custom -T %s -H "%s"]]
+local buildMap = dockerRun .. [[sudo invader-build -E -g gbx-custom -T %s -H "%s"]]
 
 local parser = argparse("invader-pipe", "Pipeline for Invader projects.")
 parser:argument("buildfile", "Path to Invader project to build")
