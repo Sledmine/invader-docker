@@ -10,7 +10,7 @@ local dockerRun =
 
 -- invader-build commands for CI/CD server
 -- user, cloudpath, outputpath, resourcespath, tagsize, scenariopath
-local buildMap = dockerRun .. [[sudo invader-build -E -g gbx-custom -T %s -H "%s"]]
+local buildMap = dockerRun .. [[sudo invader-build -E -g gbx-custom -T %s -H "%s"%s]]
 
 local parser = argparse("invader-pipe", "Pipeline for Invader projects.")
 parser:argument("buildfile", "Path to Invader project to build")
@@ -63,7 +63,8 @@ for scenarioindex, scenariopath in pairs(build.scenarios) do
         -- Build map to yml output path, remove "_dev" subfix from final scenario name
         buildcmd = buildMap:format(build.user, build.cloudpath,
                                    projectpath .. "/" .. build.outputpath, resourcespath,
-                                   build.tagsize, scenarioname, scenariopath)
+                                   build.tagsize, scenariopath)
+        buildcmd = buildcmd .. (" -N \"%s\""):format(scenarioname)
     end
     if (args.debug) then
         print(buildcmd)
