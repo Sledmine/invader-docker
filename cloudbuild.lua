@@ -37,11 +37,11 @@ local args = parser:parse()
 local build = yaml.parse(readfile(args.buildfile))
 local resourcespath = os.getenv("INVADER_RESOURCES_PATH")
 local outputpath = os.getenv("INVADER_OUTPUT_PATH")
-local pipe = io.popen("readlink -f " .. args.buildfile, "r")
-local absoluteymlpath = pipe:read()
+local pipe = io.popen("readlink -f \"" .. args.buildfile .. "\"", "r")
+local absoluteymlpath = pipe:read("*a")
 pipe:close()
 local buildfilesplit = split(absoluteymlpath, "/")
-buildfilesplit[#buildfilesplit] = nil
+table.remove(buildfilesplit, #buildfilesplit)
 local projectpath = table.concat(buildfilesplit, "/")
 if (not projectpath or projectpath == "") then
     projectpath = "."
@@ -62,7 +62,7 @@ for scenarioindex, scenariopath in pairs(build.scenarios) do
         local scenarioname = scenariosplit[#scenariosplit]:gsub("_dev", "")
         -- Build map to yml output path, remove "_dev" subfix from final scenario name
         buildcmd = buildMap:format(build.user, build.cloudpath,
-                                   projectpath .. "/" .. build.outputpath, resourcespath,
+                                   outputpath .. "/" .. build.outputpath, resourcespath,
                                    build.tagsize, scenariopath)
         buildcmd = ("%s -N \"%s\""):format(buildcmd, scenarioname)
     end
@@ -86,7 +86,7 @@ if (args.release) then
             print(command)
         end
         for var, value in pairs(vars) do
-            fixedvars = fixedvars .. "export " .. var .. "=" .. value .. " && "
+            fixedvars = fixedvars .. "export " .. var .. "=\"" .. value .. "\" && "
         end
         if not os.execute(fixedvars .. command) then
             print("Command error: " .. command)
